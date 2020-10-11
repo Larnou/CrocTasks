@@ -5,13 +5,15 @@ public class FuzzBuzz {
 
         for (int i = 1; i <= 100; i++) {
             if ((i % 3 == 0) && (i % 5 == 0))
-                System.out.printf("Число %s: кратно 3 и кратно 5, ответ: FuzzBuzz \n", i);
+                System.out.println("FizzBuzz");
             else
                 if (i % 3 == 0)
-                    System.out.printf("Число %s: кратно 3, но не кратно 5, ответ: Fuzz \n", i);
+                    System.out.println("Fizz");
                 else
                     if (i % 5 == 0)
-                        System.out.printf("Число %s: не кратно 3, но кратно 5, ответ: Buzz \n", i);
+                        System.out.println("Buzz");
+                    else
+                        System.out.println(i);
         }
     }
 }
