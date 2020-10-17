@@ -24,7 +24,7 @@ public class Action {
                 System.out.println("                  Сейчас играет: " + param.name);
                 System.out.println("                        " + param.playlist.get(songNumber - 1));
                 play();
-                System.out.println("                    Спасибо за использование Музяфона-2000");
+                System.out.println("                    Спасибо за использование Музяфона-2077");
                 System.out.println("                              Ждём вас снова");
                 break;
             } else {
@@ -47,7 +47,7 @@ public class Action {
                 System.out.println("                  Сейчас играет: " + param.name);
                 System.out.println("                        " + param.playlist.get(songNumber - 1));
                 play();
-                System.out.println("                    Спасибо за использование Музяфона-2000");
+                System.out.println("                    Спасибо за использование Музяфона-2077");
                 System.out.println("                              Ждём вас снова");
                 break;
             } else {
