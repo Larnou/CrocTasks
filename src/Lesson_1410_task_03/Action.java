@@ -6,10 +6,22 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 
-
+/**
+ * All actions are stored here
+ * @author <strong>Shubin Dmitry</strong>, made for Croc
+ */
 public class Action {
 
-    // показывает список песен выбранного носителя и завершает программу, для других классов по аналогии
+    /**
+     * Take the vinyl record and show playlist of this record, if user choose number of song which doesn't exist
+     * Myzyafon will offer to chose another number, until this number exist. After it plays the chosen song
+     * and close the Myzyafon
+     * @param param one of the vinyl records
+     * @throws IOException possible exception
+     * @throws InterruptedException possible exception
+     * @see Action#play()
+     * @see Action#songError()
+     */
     public static void choiceVinil(Classes.vinilDisk param) throws IOException, InterruptedException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
@@ -33,6 +45,16 @@ public class Action {
         }
     }
 
+    /**
+     * Take the cd disk and show playlist of this disk, if user choose number of song which doesn't exist
+     * Myzyafon will offer to chose another number, until this number exist. After it plays the chosen song
+     * and close the Myzyafon
+     * @param param one of the CD disks
+     * @throws IOException possible exception
+     * @throws InterruptedException possible exception
+     * @see Action#play()
+     * @see Action#songError()
+     */
     public static void choiceCD(Classes.cdDisk param) throws IOException, InterruptedException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
@@ -56,6 +78,16 @@ public class Action {
         }
     }
 
+    /**
+     * Take any device and show playlist of this device, if user choose number of song which doesn't exist
+     * Myzyafon will offer to chose another number, until this number exist. After it plays the chosen song
+     * and close the Myzyafon
+     * @param param one of the flesh-cards
+     * @throws IOException possible exception
+     * @throws InterruptedException possible exception
+     * @see Action#play()
+     * @see Action#songError()
+     */
     public static void choiceUniver(Classes.uniDisk param) throws IOException, InterruptedException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
@@ -78,7 +110,14 @@ public class Action {
             }
         }
     }
-    // проверяет правильность введённого устройства для прослушивания
+
+    /**
+     * Check if name of this device exist, if not will offer to input until it's done
+     * @param param Array of the names existing devices to play songs
+     * @return Choosen name of song-player device
+     * @throws IOException possible exception
+     * @see Action#errorMessage()
+     */
     public static ArrayList<String> checkFirstInput(ArrayList<String> param) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         ArrayList<String> array = new ArrayList<>();
@@ -96,8 +135,16 @@ public class Action {
         return array;
     }
 
-    // пользователь выбирает номер устройства, проверяется существует ли такое устройство и показывается список
-    // песен этого устройства
+    /**
+     * Shows playlist of chosen device, user needs to chose the number of the song, if this number don't exist
+     * user should input the number one more time
+     * @param v1 vinyl record Vine for the evening
+     * @param v2 vinyl record Vinyl of the last
+     * @throws IOException possible exception
+     * @throws InterruptedException possible exception
+     * @see Action#choiceVinil(Classes.vinilDisk)
+     * @see Action#errorDevice()
+     */
     public static void outputDeviceVinil(Classes.vinilDisk v1, Classes.vinilDisk v2)
             throws IOException, InterruptedException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -109,7 +156,7 @@ public class Action {
             if (num == 1) {
                 System.out.println();
                 System.out.println("                       Список песен выбранного устройства: " + '\n');
-                choiceVinil(v1);  // 12 строка, вызывает метод для показа списка песен
+                choiceVinil(v1);
                 break;
             } else {
                 if (num == 2) {
@@ -127,6 +174,16 @@ public class Action {
         }
     }
 
+    /**
+     * Shows playlist of chosen device, user needs to chose the number of the song, if this number don't exist
+     * user should input the number one more time
+     * @param v1 cd disk For chill
+     * @param v2 cd disk You have found, we are showing
+     * @throws IOException possible exception
+     * @throws InterruptedException possible exception
+     * @see Action#choiceCD(Classes.cdDisk)
+     * @see Action#errorDevice()
+     */
     public static void outputDeviceCD(Classes.cdDisk v1, Classes.cdDisk v2) throws IOException, InterruptedException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("                   1. " + v1.name);
@@ -155,6 +212,21 @@ public class Action {
         }
     }
 
+    /**
+     * Shows playlist of chosen device, user needs to chose the number of the song, if this number don't exist
+     * @param v1 vinyl record Vine for the evening
+     * @param v2 vinyl record Vinyl of the last
+     * @param cd1 cd disk For chill
+     * @param cd2 cd disk You have found, we are showing
+     * @param u1 flesh card Top 10 of 2077
+     * @param u2 flesh card More songs
+     * @throws IOException possible exception
+     * @throws InterruptedException possible exception
+     * @see Action#choiceVinil(Classes.vinilDisk)
+     * @see Action#choiceCD(Classes.cdDisk)
+     * @see Action#choiceUniver(Classes.uniDisk)
+     * @see Action#choiceError()
+     */
     public static void outputDeviceUnivers(Classes.vinilDisk v1, Classes.vinilDisk v2, Classes.cdDisk cd1,
                                            Classes.cdDisk cd2, Classes.uniDisk u1, Classes.uniDisk u2)
             throws IOException, InterruptedException {
@@ -219,7 +291,10 @@ public class Action {
         }
     }
 
-    // рисует полоску во время "прослушивания" песни
+    /**
+     * Draw animation that song is "playing"
+     * @throws InterruptedException possible exception
+     */
     public static void play() throws InterruptedException {
         String inProgress = "                       >";
         System.out.print(inProgress);
@@ -232,8 +307,10 @@ public class Action {
         System.out.println();
     }
 
-    // всякие текстовые выводы
 
+    /**
+     * Text output, if song with that number doesn't exist
+     */
     public static void songError() {
         System.out.println();
         System.out.println("                      Песни под таким номером нет");
@@ -241,6 +318,9 @@ public class Action {
         System.out.println();
     }
 
+    /**
+     * Text output, if device with that number doesn't exist
+     */
     public static void choiceError() {
         System.out.println();
         System.out.println("                     Устройства под таким номером нет");
@@ -248,6 +328,9 @@ public class Action {
         System.out.println();
     }
 
+    /**
+     * Greeting
+     */
     public static void greetings() {
         System.out.println();
         System.out.println();
@@ -255,6 +338,9 @@ public class Action {
         System.out.println("         В вашем распоряжении имеются такие инструменты для воспроизведения как:" + '\n');
     }
 
+    /**
+     * Text output, if song-player device doesn't exist
+     */
     public static void errorMessage() {
         System.out.println();
         System.out.println("          Такое устройство ещё не изобретено или уже устарело и не используется" + '\n'
@@ -262,11 +348,17 @@ public class Action {
         System.out.println();
     }
 
+    /**
+     * Text output
+     */
     public static void errorDevice() {
         System.out.println();
         System.out.println("                       Вы выбрали не то устройство" + '\n');
     }
 
+    /**
+     * Text output, after greetings
+     */
     public static void offerMessage() {
         System.out.println();
         System.out.println("                       Выберите считывающие устройство:");

@@ -3,31 +3,69 @@ package Lesson_1410_task_03;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Classes which are used for the Myzyafon-2077
+ * @author <strong>Shubin Dmitry</strong>, made for Croc
+ */
 public class Classes {
-    // 3 класса для устройств
+
+    /**
+     * Vinyl song-player device class
+     */
     public static class Vinil {
         String name;
-        public Vinil(String name) { this.name = name; }
+
+        /**
+         * Constructor for making names of Vinyl type of song-player devices
+         * @param name name of song-player devices
+         */
+        public Vinil(String name) {
+            this.name = name;
+        }
     }
 
+    /**
+     * CD song-player device class
+     */
     public static class CDPlayer {
         String name;
+
+        /**
+         * Constructor for making names of CD type of song-player devices
+         * @param name name of song-player devices
+         */
         public CDPlayer(String name) {
             this.name = name;
         }
     }
 
+    /**
+     * Universal player
+     */
     public static class Universal {
         String name;
+
+        /**
+         * Constructor for making names of FLash card type of song-player devices
+         * @param name name of song-player devices
+         */
         public Universal(String name) {
             this.name = name;
         }
     }
-    // 3 класса для носителей и задания им плейлиста (генерируется рандомно)
+
+    /**
+     * Vinyl record class
+     */
     public static class vinilDisk {
         String name;
         ArrayList<String> playlist;
 
+        /**
+         * Constructor for making playlist, generates randomly
+         * @param name name of the vinyl record
+         * @param playlist playlist of the vinyl record
+         */
         public vinilDisk(String name, ArrayList<String> playlist) {
             this.name = name;
             ArrayList<String> tmp = new ArrayList<>();
@@ -39,10 +77,18 @@ public class Classes {
         }
     }
 
+    /**
+     * CD disk class
+     */
     public static class cdDisk {
         String name;
         ArrayList<String> playlist;
 
+        /**
+         * Constructor for making playlist, generates randomly
+         * @param name name of the vinyl record
+         * @param playlist playlist of the vinyl record
+         */
         public cdDisk(String name, ArrayList<String> playlist) {
             this.name = name;
             ArrayList<String> tmp = new ArrayList<>();
@@ -54,10 +100,18 @@ public class Classes {
         }
     }
 
+    /**
+     * Flash cards class
+     */
     public static class uniDisk {
         String name;
         ArrayList<String> playlist;
 
+        /**
+         * Constructor for making playlist, generates randomly
+         * @param name name of the vinyl record
+         * @param playlist playlist of the vinyl record
+         */
         public uniDisk(String name, ArrayList<String> playlist) {
             this.name = name;
             ArrayList<String> tmp = new ArrayList<>();
@@ -68,7 +122,11 @@ public class Classes {
             this.playlist = tmp;
         }
     }
-    // весь пул песен доступных для прослушивания
+
+    /**
+     * All song which are accessible for listening
+     * @return Array with all songs
+     */
     public static ArrayList<String> createPlayList() {
         ArrayList<String> globalPlayList = new ArrayList<>();
         globalPlayList.add("Hell Yeah - The BossHoss");
