@@ -13,16 +13,13 @@ public class TextReader {
 
         File f = new File(fileName);
         int amount = wordsCounter(f);
-        if (amount != -1) {
-            System.out.println("Всего в файле: " + amount + " слов");
-        }
+        System.out.println("Всего в файле: " + amount + " слов");
+
     }
 
     public static int wordsCounter(File f) {
-        int words = -1;
+        int words = 0;
         try (Scanner scanner = new Scanner(f)) {
-            words=0;
-
             String test;
             while (scanner.hasNext()) {
                 test = scanner.next();
