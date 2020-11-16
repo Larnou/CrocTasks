@@ -7,9 +7,9 @@ public class TextReader {
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        String fileName = reader.readLine();
+        //String fileName = reader.readLine();
 
-        //String fileName = "src\\CountWords_2110_task_04\\Words.txt"; // путь до файла
+        String fileName = "src\\CountWords_2110_task_04\\Words.txt"; // путь до файла
 
         File f = new File(fileName);
         int amount = wordsCounter(f);
@@ -23,6 +23,7 @@ public class TextReader {
             String test;
             while (scanner.hasNext()) {
                 test = scanner.next();
+                System.out.print(test + " ");
                 if (isThatAWord(test)) {
                     words++;
                 }
