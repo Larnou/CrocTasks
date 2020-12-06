@@ -6,16 +6,14 @@ import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
 import org.w3c.dom.*;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Set;
+import java.util.List;
 
-public class XML {
+public class task2XML {
 
-    public void ConstructorsForXML(Set<String> secondTask) {
+    public void ConstructorsForXML(List<DatesRepeats> secondTask) {
         ParamLangXML();
-
         try {
             WriteParamXML(secondTask);
         } catch (TransformerException | IOException e) {
@@ -30,25 +28,25 @@ public class XML {
     }
 
     DocumentBuilder builder;
-    public void WriteParamXML(Set<String> secondTask) throws TransformerException, IOException {
+    public void WriteParamXML(List<DatesRepeats> secondTask) throws TransformerException, IOException {
 
-        Document doc=builder.newDocument();
-        Element RootElement=doc.createElement("sales");
+        Document doc = builder.newDocument();
+        Element RootElement = doc.createElement("sales");
 
-        for (String elemnet : secondTask) {
+        for (DatesRepeats element : secondTask) {
 
-            Element NameElementDate=doc.createElement("date");
-            NameElementDate.appendChild(doc.createTextNode(elemnet.split("date = ")[1].split(",")[0]));
-            RootElement.appendChild(NameElementDate);
+            Element Date = doc.createElement("date");
+            Date.appendChild(doc.createTextNode(element.getDate()));
+            RootElement.appendChild(Date);
 
-            Element NameElementRepeats=doc.createElement("repeats");
-            NameElementRepeats.appendChild(doc.createTextNode(elemnet.split("repeats = ")[1]));
-            RootElement.appendChild(NameElementRepeats);
+            Element Repeats = doc.createElement("repeats");
+            Repeats.appendChild(doc.createTextNode(String.valueOf(element.getRepeats())));
+            RootElement.appendChild(Repeats);
 
         }
         doc.appendChild(RootElement);
 
-        Transformer t=TransformerFactory.newInstance().newTransformer();
+        Transformer t = TransformerFactory.newInstance().newTransformer();
         t.setOutputProperty(OutputKeys.METHOD, "xml");
         t.setOutputProperty(OutputKeys.INDENT, "yes");
         String xmlFilePath = "src\\Final_0212_task_07\\xmls\\secondTask.xml";

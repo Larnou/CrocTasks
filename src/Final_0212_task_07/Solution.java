@@ -1,6 +1,6 @@
 package Final_0212_task_07;
 
-import java.io.FileInputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
@@ -8,15 +8,24 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.ObjectWriter;
 import org.codehaus.jackson.type.TypeReference;
-import org.codehaus.jackson.*;
+import org.codehaus.jackson.util.DefaultPrettyPrinter;
 
 
 public class Solution {
 
     public static void main(String[] args) throws IOException, ParseException {
 
+        /*
+            Исправлен вывод json-файла, теперь он красивый :)
+            Исправлено чтение из json в объект Java
+            Выполнено первое и второе задание, правда императивным методом. Тема стримом пока кажется сликшмо сложной, но
+            буду знать что такая вещь в Java есть и обязательно постараюсь её выучить и разобраться.
+        */
+
         ObjectMapper objectMapper = new ObjectMapper();
+        ObjectWriter writer = objectMapper.writer(new DefaultPrettyPrinter());
 
         List<Item> itemList = new ArrayList<>();
 
@@ -29,7 +38,7 @@ public class Solution {
         itemList.add(new Item("Puzzles Hatber", 45));
 
         String itemFilePath = "src\\Final_0212_task_07\\jsons\\items.json";
-        objectMapper.writeValue(new FileOutputStream(itemFilePath), itemList);
+        writer.writeValue(new FileOutputStream(itemFilePath), itemList);
 
         // ========================================
 
@@ -40,7 +49,7 @@ public class Solution {
         sellerList.add(new Seller("Alexandr", "Miroshnichenko", 3));
 
         String sellerFilePath = "src\\Final_0212_task_07\\jsons\\sellers.json";
-        objectMapper.writeValue(new FileOutputStream(sellerFilePath), sellerList);
+        writer.writeValue(new FileOutputStream(sellerFilePath), sellerList);
 
         //=================================================
 
@@ -58,7 +67,7 @@ public class Solution {
         existenceList.add(new Existance(sellerList.get(2).getSellerID(), itemList.get(6).getItemId(), 12, 590));
 
         String existanceFilePath = "src\\Final_0212_task_07\\jsons\\existance.json";
-        objectMapper.writeValue(new FileOutputStream(existanceFilePath), existenceList);
+        writer.writeValue(new FileOutputStream(existanceFilePath), existenceList);
 
         //=======================================================
 
@@ -76,62 +85,97 @@ public class Solution {
         salesList.add(new Sales(200107, sellerList.get(2).getSellerID(), itemList.get(6).getItemId(), 3, "26 08 2017"));
 
         String salesFilePath = "src\\Final_0212_task_07\\jsons\\sales.json";
-        objectMapper.writeValue(new FileOutputStream(salesFilePath), salesList);
+        writer.writeValue(new FileOutputStream(salesFilePath), salesList);
 
         // данные заполнили теперь начинаем играть с xml
         //==============================================
 
-        // 2 задание кароч, первое я не понимаю а со строками какая-то фигня
+        // 1 задание:
+        // Для каждого товара вывести в файл продавца, у которого в наличии наибольшее количество этого товара,
+        // и само количество этого товара у него в наличии
 
-        Sales[] sales = objectMapper.readValue(new FileInputStream(salesFilePath), Sales[].class);
+        List<Existance> existances = objectMapper.readValue(new File(existanceFilePath), new TypeReference<List<Existance>>(){});
 
-        List<String> sale = new ArrayList<>();
-        List<String> dates = new ArrayList<>();
-        for (int i = 0; i < sales.length; i++) {
-            sale.add(String.valueOf(sales[i]));
-            dates.add(String.valueOf(sales[i]).split("date=\'")[1].split("\'")[0]);
+        int maxAmount;
+        Map<Integer, Integer> mapAmount = new HashMap<>();
+        for (int i = 0; i < existances.size(); i++) {
+            maxAmount = existances.get(i).getItemAmount();
+            for (Existance existance : existances) {
+                if (existance.getItemAmount() > maxAmount && existance.getItemID() == existances.get(i).getItemID()) {
+                    maxAmount = existance.getItemAmount();
+                }
+            }
+            mapAmount.put(existances.get(i).getItemID(), maxAmount);
         }
 
+        List<SellerHasItem> hasItems = new ArrayList<>();
+        for (Map.Entry<Integer, Integer> el : mapAmount.entrySet()) {
+            hasItems.add(new SellerHasItem(getSellerNameByID(el.getKey(), el.getValue(), sellerFilePath, existanceFilePath),
+                    getItemByID(el.getKey(), itemFilePath), el.getValue()));
+        }
+
+        task1XML xml1 = new task1XML();
+        xml1.ConstructorsForXML(hasItems);
+
+
+        // 2 задание:
+        // Вывести в файл распределение общего количества продаж по датам
+        List<Sales> sales = objectMapper.readValue(new File(salesFilePath), new TypeReference<List<Sales>>(){});
+        List<Date> dates = new ArrayList<>();
         SimpleDateFormat formatter = new SimpleDateFormat("dd MM yyyy");
-        List<Date> actualDates = new ArrayList<>();
-        for (int i = 0; i < sales.length; i++) {
-            Date date = formatter.parse(dates.get(i));
-            actualDates.add(date);
+
+        for (Sales sale : sales) {
+            dates.add(formatter.parse(sale.date));
         }
 
-        // and now we going to count time   <date = >
-        //                                  <counts = >
-
-        List<Integer> counts = new ArrayList<>();
+        List<DatesRepeats> datesRepeats = new ArrayList<>();
+        Map<Date, Integer> map = new HashMap<>();
         int el = 0;
-        for (int i = 0; i < actualDates.size(); i++) {
-            for (int j = 0; j < actualDates.size(); j++) {
-                if (actualDates.get(i).getTime() == actualDates.get(j).getTime()) {
+        for (int i = 0; i < dates.size(); i++) {
+            for (Date date : dates) {
+                if (dates.get(i).equals(date)) {
                     el++;
                 }
             }
-            counts.add(el);
+            map.put(dates.get(i), el);
             el = 0;
         }
 
-        List<String> tmp = new ArrayList<>();
-        for (int i = 0; i < actualDates.size(); i++) {
-            tmp.add("date = " + formatter.format(actualDates.get(i)) + ", repeats = " + counts.get(i));
+        for (Map.Entry<Date, Integer> m : map.entrySet()) {
+            datesRepeats.add(new DatesRepeats(formatter.format(m.getKey()), m.getValue()));
         }
-        Set<String> secondTask = new HashSet<>(tmp);
 
+        task2XML xml2 = new task2XML();
+        xml2.ConstructorsForXML(datesRepeats);
+    }
 
-        XML xml = new XML();
-        xml.ConstructorsForXML(secondTask);
+    public static String getItemByID(int ID, String Path) throws IOException {
 
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Item> items = objectMapper.readValue(new File(Path), new TypeReference<List<Item>>(){});
+        for (Item item : items) {
+            if (ID == item.getItemId()) {
+                return item.getItemName();
+            }
+        }
+        return Path;
+    }
 
-        // Тут я сильно запутался и не понял как перевести из JSON в объект List'a выдаёт ошибки постоянно.
-        // Поэтому пришлось делать костыльно через строки *грустный смайлик* :-(
-
-        //List<Item> participantJsonList = objectMapper.readValue(Arrays.toString(items), new TypeReference<List<Item>>(){});
-        //System.out.println(participantJsonList);
-        //String formattedString = Arrays.toString(items).trim().replaceAll("\uFFFD", "");
-        // List<Item> ppl2 = Arrays.asList(objectMapper.readValue(formattedString, Item[].class));
-        //participantJsonList.forEach(System.out::println);
+    public static String getSellerNameByID(int itemID, int itemAmount,  String sellerPath, String existPath) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Seller> sellers = objectMapper.readValue(new File(sellerPath), new TypeReference<List<Seller>>(){});
+        List<Existance> existances = objectMapper.readValue(new File(existPath), new TypeReference<List<Existance>>(){});
+        int selID;
+        for (Existance exist : existances) {
+            if (exist.getItemID() == itemID && exist.getItemAmount() == itemAmount) {
+                selID = exist.getSellerID();
+                for (Seller seller : sellers) {
+                    if (selID == seller.getSellerID()) {
+                        return seller.getSellerName() + " " + seller.getSellerSecondName();
+                    }
+                }
+            }
+        }
+        return sellerPath;
     }
 }
